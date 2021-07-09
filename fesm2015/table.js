@@ -575,6 +575,9 @@ let PriorityComponent = class PriorityComponent {
         if (!this.iconLabel) {
             this.label = '';
         }
+        else if (this.iconLabel.indexOf('-') == -1) {
+            this.label = this.iconLabel;
+        }
         else {
             this.label = this.iconLabel.split('-')[1];
         }
