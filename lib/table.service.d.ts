@@ -5,6 +5,7 @@ export declare class TableService {
     config: DesignTableInterface;
     displayColumn: any;
     updateHeader: EventEmitter<boolean>;
+    emptyRow: boolean;
     constructor(settingConfig: any);
     setHeader(displayColumn: any): void;
 }

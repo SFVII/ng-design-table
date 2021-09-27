@@ -39,6 +39,9 @@ declare class TableComponent implements OnInit, OnChanges {
     lang: string;
     btnOverride: boolean;
     callFunction: EventEmitter<any>;
+    inputSearch: string;
+    EmptyRow: boolean;
+    blockDetails: boolean;
     columnsToDisplay: string[];
     filter: Array<string>;
     displayedColumns: any;
@@ -49,8 +52,12 @@ declare class TableComponent implements OnInit, OnChanges {
     search: string;
     cancelSearch: string;
     noResult: string;
+    details: string;
+    showTable: boolean;
     constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService);
+    expand(element: any): void;
     ngOnInit(): void;
+    ngAfterViewChecked(): void;
     buildHeaders(): Promise<void>;
     generateClass(Class: string[]): string[];
     sort(): Promise<displayedColumnsInterface[]>;

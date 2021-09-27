@@ -50,10 +50,14 @@ export declare class CoreMatTable extends DataSource<Element> {
     private pageFilter;
     private pageFilterDate;
     private backUpData;
-    constructor(data: any, sortRules: Sort, rangeRules: FilterDateInterface, size?: number, detailRaws?: boolean);
+    private emptyRow;
+    private filterTable;
+    private dataAfterSearch;
+    constructor(data: any, sortRules: Sort, rangeRules: FilterDateInterface, size?: number, detailRaws?: boolean, emptyRow?: boolean, filterT?: any);
     filterDateRange(data: any, range: FilterDateInterface): any;
     ponderation(str: string, searchKey: string): number;
     filterData(data: any, filter: any): any;
+    filterDataObject(data: any, filter: any): any;
     sortData(data: any, sortAction: any): any;
     compare(a: number | string | any[], b: number | string | any[], isAsc: boolean): number;
     fetch(page: number): void;

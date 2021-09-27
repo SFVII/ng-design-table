@@ -4,6 +4,7 @@ export declare class NameAvatarComponent implements OnInit, AfterViewInit {
     private service;
     src: string;
     fontSize: string;
+    textSize: string;
     icon: ElementRef<HTMLElement>;
     letter: string;
     private _padding;

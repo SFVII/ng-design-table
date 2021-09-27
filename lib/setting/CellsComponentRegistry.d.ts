@@ -6,6 +6,7 @@
  ***********************************************************/
 export declare enum CellsComponentList {
     ButtonLink = "button-link",
+    ButtonLinkText = "button-link-text",
     ButtonClick = "button-click",
     Priority = "priority",
     Origin = "origin",
@@ -17,5 +18,6 @@ export declare enum CellsComponentList {
     YesNo = "yes-no-display",
     CustomerRank = "customer-rank",
     ItCategory = "it-category",
-    ItStatus = "it-status"
+    ItStatus = "it-status",
+    CustomIcon = "custom-icon"
 }
