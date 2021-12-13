@@ -875,9 +875,6 @@ var CoreMatTable = /** @class */ (function (_super) {
         var e_2, _a, e_3, _b;
         if (this.number > 0)
             this.fetch(0);
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
         var result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -912,9 +909,8 @@ var CoreMatTable = /** @class */ (function (_super) {
                         }
                         finally { if (e_3) throw e_3.error; }
                     }
-                    if (e.pond && combination === stack.length) {
+                    if (e.pond && combination === stack.length)
                         result.push(e);
-                    }
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -1141,7 +1137,6 @@ var TableComponent = /** @class */ (function () {
             this.data.paginator = this.paginatorCurrent;
             this.data.sort = this.sortCurrent;
             this.data.pageNumber.subscribe(function (newpage) {
-                console.log('newpage console : ', newpage);
                 if (newpage > 0) {
                     _this.router.navigate([], {
                         relativeTo: _this.route,
@@ -1155,14 +1150,12 @@ var TableComponent = /** @class */ (function () {
                         queryParams: { page: null },
                         queryParamsHandling: 'merge',
                     });
-                    _this.changeDetectorRef.markForCheck();
                     console.log('on passe dans la ligne 142');
                 }
                 if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
                     _this.data.paginator.pageIndex = newpage;
-                    _this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 146');
                 }
+                _this.changeDetectorRef.markForCheck();
             });
             var page = this.route.snapshot.queryParams["page"];
             if (page) {

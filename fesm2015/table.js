@@ -835,9 +835,6 @@ class CoreMatTable extends DataSource {
     filterData(data, filter) {
         if (this.number > 0)
             this.fetch(0);
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
         const result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -860,9 +857,8 @@ class CoreMatTable extends DataSource {
                         combination++;
                     }
                 }
-                if (e.pond && combination === stack.length) {
+                if (e.pond && combination === stack.length)
                     result.push(e);
-                }
             }
             this.dataAfterSearch = result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
             return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
@@ -1060,7 +1056,6 @@ let TableComponent = class TableComponent {
             this.data.paginator = this.paginatorCurrent;
             this.data.sort = this.sortCurrent;
             this.data.pageNumber.subscribe((newpage) => {
-                console.log('newpage console : ', newpage);
                 if (newpage > 0) {
                     this.router.navigate([], {
                         relativeTo: this.route,
@@ -1074,14 +1069,12 @@ let TableComponent = class TableComponent {
                         queryParams: { page: null },
                         queryParamsHandling: 'merge',
                     });
-                    this.changeDetectorRef.markForCheck();
                     console.log('on passe dans la ligne 142');
                 }
                 if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
                     this.data.paginator.pageIndex = newpage;
-                    this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 146');
                 }
+                this.changeDetectorRef.markForCheck();
             });
             const page = this.route.snapshot.queryParams["page"];
             if (page) {
