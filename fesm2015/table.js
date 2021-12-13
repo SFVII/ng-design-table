@@ -833,8 +833,9 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
-        if (this.number > 0)
+        if (this.number > 0) {
             this.fetch(0);
+        }
         const result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -857,8 +858,9 @@ class CoreMatTable extends DataSource {
                         combination++;
                     }
                 }
-                if (e.pond && combination === stack.length)
+                if (e.pond && combination === stack.length) {
                     result.push(e);
+                }
             }
             this.dataAfterSearch = result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
             return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
@@ -869,8 +871,9 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
-        if (this.number > 0)
+        if (this.number > 0) {
             this.fetch(0);
+        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -925,8 +928,9 @@ class CoreMatTable extends DataSource {
     }
     fetch(page) {
         if (this.number !== page) {
-            this.number = 0;
+            this.number = page;
             this.pageNumber.next(page);
+            this.paginator.pageIndex = page;
         }
         else {
             console.log('Same page  old %d / new %d', this.number, page);
@@ -1071,9 +1075,6 @@ let TableComponent = class TableComponent {
                     });
                     console.log('on passe dans la ligne 142');
                 }
-                if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
-                    this.data.paginator.pageIndex = newpage;
-                }
                 this.changeDetectorRef.markForCheck();
             });
             const page = this.route.snapshot.queryParams["page"];
@@ -1081,7 +1082,7 @@ let TableComponent = class TableComponent {
                 const currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
                 this.data.fetch(currentPage);
-                this.data.number = currentPage;
+                //this.data.number = currentPage;
             }
             this.PrivateColumnDefinitions = this.columnDefinitions;
             this.buildHeaders().catch((err) => console.log('Error build table', err));

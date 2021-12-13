@@ -873,8 +873,9 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterData = function (data, filter) {
         var e_2, _a, e_3, _b;
-        if (this.number > 0)
+        if (this.number > 0) {
             this.fetch(0);
+        }
         var result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -909,8 +910,9 @@ var CoreMatTable = /** @class */ (function (_super) {
                         }
                         finally { if (e_3) throw e_3.error; }
                     }
-                    if (e.pond && combination === stack.length)
+                    if (e.pond && combination === stack.length) {
                         result.push(e);
+                    }
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
@@ -930,8 +932,9 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterDataObject = function (data, filter) {
         var e_4, _a;
-        if (this.number > 0)
+        if (this.number > 0) {
             this.fetch(0);
+        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -1000,8 +1003,9 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.fetch = function (page) {
         if (this.number !== page) {
-            this.number = 0;
+            this.number = page;
             this.pageNumber.next(page);
+            this.paginator.pageIndex = page;
         }
         else {
             console.log('Same page  old %d / new %d', this.number, page);
@@ -1152,9 +1156,6 @@ var TableComponent = /** @class */ (function () {
                     });
                     console.log('on passe dans la ligne 142');
                 }
-                if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
-                    _this.data.paginator.pageIndex = newpage;
-                }
                 _this.changeDetectorRef.markForCheck();
             });
             var page = this.route.snapshot.queryParams["page"];
@@ -1162,7 +1163,7 @@ var TableComponent = /** @class */ (function () {
                 var currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
                 this.data.fetch(currentPage);
-                this.data.number = currentPage;
+                //this.data.number = currentPage;
             }
             this.PrivateColumnDefinitions = this.columnDefinitions;
             this.buildHeaders().catch(function (err) { return console.log('Error build table', err); });
