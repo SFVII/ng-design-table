@@ -873,11 +873,10 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterData = function (data, filter) {
         var e_2, _a, e_3, _b;
-        if (this.number > 0)
-            this.fetch(0);
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
+        // if (this.number > 0) this.fetch(0);
+        if (data.length === 0 && this.data) {
+            data = this.data;
+        }
         var result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -934,11 +933,9 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterDataObject = function (data, filter) {
         var e_4, _a;
-        if (this.number > 0)
-            this.fetch(0);
         if (data.length === 0 && this.data) {
-            //data = this.data;
-            return data;
+            data = this.data;
+            //return data;
         }
         var result = [];
         if (filter && Object.keys(filter).length > 0) {

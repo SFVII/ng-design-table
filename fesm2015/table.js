@@ -833,11 +833,10 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
-        if (this.number > 0)
-            this.fetch(0);
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
+        // if (this.number > 0) this.fetch(0);
+        if (data.length === 0 && this.data) {
+            data = this.data;
+        }
         const result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -873,11 +872,9 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
-        if (this.number > 0)
-            this.fetch(0);
         if (data.length === 0 && this.data) {
-            //data = this.data;
-            return data;
+            data = this.data;
+            //return data;
         }
         const result = [];
         if (filter && Object.keys(filter).length > 0) {
