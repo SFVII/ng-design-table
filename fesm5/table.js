@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { BehaviorSubject, from } from 'rxjs';
-import { switchMap, debounceTime, share, pluck } from 'rxjs/operators';
+import { debounceTime, switchMap, share, pluck } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/collections';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -769,7 +769,10 @@ var CoreMatTable = /** @class */ (function (_super) {
         _this.pageFilterDate = new BehaviorSubject(null);
         _this.pageFilter = new BehaviorSubject('');
         _this.pageNumber = new BehaviorSubject(_this.startWith);
-        _this._totalElements.subscribe(function (page) { return _this.totalElements = page; });
+        _this._totalElements.pipe(debounceTime(200)).subscribe(function (itemsLength) {
+            console.log('_totalElements', itemsLength);
+            _this.totalElements = itemsLength;
+        });
         _this.page$ = _this.pageSort.pipe(switchMap(function (sortAction) { return _this.pageFilter.pipe(debounceTime(500))
             .pipe(switchMap(function (filter) { return _this.pageFilterDate.pipe(switchMap(function (range) { return _this.pageNumber.pipe(switchMap(function (page) { return from([{
                 content: _this.slice(_this.sortData(_this.filterDataObject(_this.filterData(_this.filterDateRange(_this.data, range), filter), _this.filterTable), sortAction), page, _this.size, detailRaws)
@@ -872,10 +875,12 @@ var CoreMatTable = /** @class */ (function (_super) {
                 finally { if (e_2) throw e_2.error; }
             }
             this.dataAfterSearch = result.filter((function (e) { return e.pond; })).sort(function (a, b) { return a > b ? 1 : (a < b ? -1 : 0); });
+            this._totalElements.next(this.dataAfterSearch.length);
             return result.filter((function (e) { return e.pond; })).sort(function (a, b) { return a > b ? 1 : (a < b ? -1 : 0); });
         }
         else {
             this.dataAfterSearch = data;
+            this._totalElements.next(this.dataAfterSearch.length);
             return data;
         }
     };
@@ -918,6 +923,7 @@ var CoreMatTable = /** @class */ (function (_super) {
                 finally { if (e_4) throw e_4.error; }
             }
             this.dataAfterSearch = result;
+            this._totalElements.next(this.dataAfterSearch.length);
             return result;
             //return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
         }
@@ -1110,7 +1116,7 @@ var TableComponent = /** @class */ (function () {
                 }
                 _this.changeDetectorRef.markForCheck();
             });
-            var page = this.route.snapshot.queryParams["page"];
+            var page = this.route.snapshot.queryParams['page'];
             if (page) {
                 var currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
@@ -1236,9 +1242,9 @@ var TableComponent = /** @class */ (function () {
             if (this.data) {
                 this.data.filter(this.inputSearch);
                 this.data.fetch(0);
-                this.changeDetectorRef.markForCheck();
             }
         }
+        this.changeDetectorRef.markForCheck();
         //    this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [

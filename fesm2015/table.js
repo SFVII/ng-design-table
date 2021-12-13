@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { BehaviorSubject, from } from 'rxjs';
-import { switchMap, debounceTime, share, pluck } from 'rxjs/operators';
+import { debounceTime, switchMap, share, pluck } from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/collections';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -742,7 +742,10 @@ class CoreMatTable extends DataSource {
         this.pageFilterDate = new BehaviorSubject(null);
         this.pageFilter = new BehaviorSubject('');
         this.pageNumber = new BehaviorSubject(this.startWith);
-        this._totalElements.subscribe((page) => this.totalElements = page);
+        this._totalElements.pipe(debounceTime(200)).subscribe((itemsLength) => {
+            console.log('_totalElements', itemsLength);
+            this.totalElements = itemsLength;
+        });
         this.page$ = this.pageSort.pipe(switchMap(sortAction => this.pageFilter.pipe(debounceTime(500))
             .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageNumber.pipe(switchMap(page => from([{
                 content: this.slice(this.sortData(this.filterDataObject(this.filterData(this.filterDateRange(this.data, range), filter), this.filterTable), sortAction), page, this.size, detailRaws)
@@ -812,10 +815,12 @@ class CoreMatTable extends DataSource {
                 }
             }
             this.dataAfterSearch = result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
+            this._totalElements.next(this.dataAfterSearch.length);
             return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
         }
         else {
             this.dataAfterSearch = data;
+            this._totalElements.next(this.dataAfterSearch.length);
             return data;
         }
     }
@@ -844,6 +849,7 @@ class CoreMatTable extends DataSource {
                 }
             }
             this.dataAfterSearch = result;
+            this._totalElements.next(this.dataAfterSearch.length);
             return result;
             //return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
         }
@@ -1018,7 +1024,7 @@ let TableComponent = class TableComponent {
                 }
                 this.changeDetectorRef.markForCheck();
             });
-            const page = this.route.snapshot.queryParams["page"];
+            const page = this.route.snapshot.queryParams['page'];
             if (page) {
                 const currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
@@ -1108,9 +1114,9 @@ let TableComponent = class TableComponent {
             if (this.data) {
                 this.data.filter(this.inputSearch);
                 this.data.fetch(0);
-                this.changeDetectorRef.markForCheck();
             }
         }
+        this.changeDetectorRef.markForCheck();
         //    this.ngOnInit();
     }
 };

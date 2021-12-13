@@ -979,7 +979,10 @@
             _this.pageFilterDate = new rxjs.BehaviorSubject(null);
             _this.pageFilter = new rxjs.BehaviorSubject('');
             _this.pageNumber = new rxjs.BehaviorSubject(_this.startWith);
-            _this._totalElements.subscribe(function (page) { return _this.totalElements = page; });
+            _this._totalElements.pipe(operators.debounceTime(200)).subscribe(function (itemsLength) {
+                console.log('_totalElements', itemsLength);
+                _this.totalElements = itemsLength;
+            });
             _this.page$ = _this.pageSort.pipe(operators.switchMap(function (sortAction) { return _this.pageFilter.pipe(operators.debounceTime(500))
                 .pipe(operators.switchMap(function (filter) { return _this.pageFilterDate.pipe(operators.switchMap(function (range) { return _this.pageNumber.pipe(operators.switchMap(function (page) { return rxjs.from([{
                     content: _this.slice(_this.sortData(_this.filterDataObject(_this.filterData(_this.filterDateRange(_this.data, range), filter), _this.filterTable), sortAction), page, _this.size, detailRaws)
@@ -1082,10 +1085,12 @@
                     finally { if (e_2) throw e_2.error; }
                 }
                 this.dataAfterSearch = result.filter((function (e) { return e.pond; })).sort(function (a, b) { return a > b ? 1 : (a < b ? -1 : 0); });
+                this._totalElements.next(this.dataAfterSearch.length);
                 return result.filter((function (e) { return e.pond; })).sort(function (a, b) { return a > b ? 1 : (a < b ? -1 : 0); });
             }
             else {
                 this.dataAfterSearch = data;
+                this._totalElements.next(this.dataAfterSearch.length);
                 return data;
             }
         };
@@ -1128,6 +1133,7 @@
                     finally { if (e_4) throw e_4.error; }
                 }
                 this.dataAfterSearch = result;
+                this._totalElements.next(this.dataAfterSearch.length);
                 return result;
                 //return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
             }
@@ -1320,7 +1326,7 @@
                     }
                     _this.changeDetectorRef.markForCheck();
                 });
-                var page = this.route.snapshot.queryParams["page"];
+                var page = this.route.snapshot.queryParams['page'];
                 if (page) {
                     var currentPage = Number(page) - 1;
                     this.data.startWith = currentPage;
@@ -1446,9 +1452,9 @@
                 if (this.data) {
                     this.data.filter(this.inputSearch);
                     this.data.fetch(0);
-                    this.changeDetectorRef.markForCheck();
                 }
             }
+            this.changeDetectorRef.markForCheck();
             //    this.ngOnInit();
         };
         TableComponent.ctorParameters = function () { return [
