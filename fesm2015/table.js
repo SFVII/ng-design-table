@@ -1114,14 +1114,12 @@ let TableComponent = class TableComponent {
     }
     ngOnChanges(changes) {
         if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-            && this.inputSearch.length < 200) {
-            if (this.data) {
-                this.data.filter(this.inputSearch);
-                this.data.fetch(0);
-            }
+            && this.inputSearch.length < 200 && this.data) {
+            this.data.filter(this.inputSearch);
+            this.data.fetch(0);
         }
         //this.changeDetectorRef.markForCheck();
-        if (changes.data.isFirstChange()) {
+        if (changes.data && changes.data.isFirstChange()) {
             console.log('Init init');
             this.ngOnInit();
         }
