@@ -924,7 +924,7 @@ class CoreMatTable extends DataSource {
         if (this.number !== page) {
             this.number = page;
             this.pageNumber.next(page);
-            this.paginator.pageIndex = page;
+            // this.paginator.pageIndex = page;
         }
         else {
             console.log('Same page  old %d / new %d', this.number, page);
