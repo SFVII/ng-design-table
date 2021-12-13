@@ -1290,7 +1290,8 @@ var TableComponent = /** @class */ (function () {
     TableComponent.prototype.expandShow = function (template) {
     };
     TableComponent.prototype.ngOnChanges = function (changes) {
-        if (this.inputSearch) {
+        console.log(this.data);
+        if (this.data && this.inputSearch) {
             this._inputSearch.next(this.inputSearch === '' ? null : this.inputSearch);
         }
         /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
@@ -1303,7 +1304,7 @@ var TableComponent = /** @class */ (function () {
              this.changeDetectorRef.markForCheck();
            }
          }*/
-        // this.ngOnInit();
+        this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [
         { type: Router },

@@ -1171,7 +1171,8 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if (this.inputSearch) {
+        console.log(this.data);
+        if (this.data && this.inputSearch) {
             this._inputSearch.next(this.inputSearch === '' ? null : this.inputSearch);
         }
         /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
@@ -1184,7 +1185,7 @@ let TableComponent = class TableComponent {
              this.changeDetectorRef.markForCheck();
            }
          }*/
-        // this.ngOnInit();
+        this.ngOnInit();
     }
 };
 TableComponent.ctorParameters = () => [
