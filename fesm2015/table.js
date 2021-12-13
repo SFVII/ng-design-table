@@ -928,8 +928,13 @@ class CoreMatTable extends DataSource {
         return (((Array.isArray(a) ? a.length : a) > ((Array.isArray(b) ? b.length : b)) ? -1 : ((Array.isArray(b) ? b.length : b)) > ((Array.isArray(a) ? a.length : a)) ? 1 : 0) * (isAsc ? -1 : 1));
     }
     fetch(page) {
-        this.pageNumber.next(page);
-        this.number = 0;
+        if (this.number !== page) {
+            this.number = 0;
+            this.pageNumber.next(page);
+        }
+        else {
+            console.log('Same page  old %d / new %d', this.number, page);
+        }
     }
     sortIt(sortidea) {
         this.pageSort.next(sortidea);
