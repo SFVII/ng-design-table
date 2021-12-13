@@ -1084,6 +1084,10 @@ let TableComponent = class TableComponent {
                     });
                     console.log('on passe dans la ligne 142');
                 }
+                if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
+                    this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146');
+                }
                 this.changeDetectorRef.markForCheck();
             });
             const page = this.route.snapshot.queryParams['page'];
@@ -1185,7 +1189,7 @@ let TableComponent = class TableComponent {
              this.changeDetectorRef.markForCheck();
            }
          }*/
-        this.ngOnInit();
+        // this.ngOnInit();
     }
 };
 TableComponent.ctorParameters = () => [

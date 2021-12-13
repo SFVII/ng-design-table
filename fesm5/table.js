@@ -1167,6 +1167,10 @@ var TableComponent = /** @class */ (function () {
                     });
                     console.log('on passe dans la ligne 142');
                 }
+                if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
+                    _this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146');
+                }
                 _this.changeDetectorRef.markForCheck();
             });
             var page = this.route.snapshot.queryParams['page'];
@@ -1304,7 +1308,7 @@ var TableComponent = /** @class */ (function () {
              this.changeDetectorRef.markForCheck();
            }
          }*/
-        this.ngOnInit();
+        // this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [
         { type: Router },
