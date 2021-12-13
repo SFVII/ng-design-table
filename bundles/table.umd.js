@@ -1333,8 +1333,9 @@
                 if (search === void 0) { search = null; }
                 console.log('Searching....', search);
                 if (search) {
-                    //this.data.fetch(0);
+                    //
                     _this.data.filter(search);
+                    _this.data.fetch(0);
                 }
             });
         }

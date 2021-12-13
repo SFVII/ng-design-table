@@ -1041,8 +1041,9 @@ let TableComponent = class TableComponent {
         this._inputSearch.pipe(debounceTime(500)).subscribe((search = null) => {
             console.log('Searching....', search);
             if (search) {
-                //this.data.fetch(0);
+                //
                 this.data.filter(search);
+                this.data.fetch(0);
             }
         });
     }
