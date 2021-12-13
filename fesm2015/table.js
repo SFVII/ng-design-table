@@ -985,7 +985,13 @@ let TableComponent = class TableComponent {
         }
         console.log(this.expandedElement);
     }
-    init() {
+    ngOnInit() {
+        this.service.emptyRow = this.EmptyRow;
+        this.open = this.translate.translate(this.lang, 'OPEN');
+        this.search = this.translate.translate(this.lang, 'SEARCH');
+        this.cancelSearch = this.translate.translate(this.lang, 'CANCEL_SEARCH');
+        this.noResult = this.translate.translate(this.lang, 'NO_RESULT');
+        this.details = this.translate.translate(this.lang, 'DETAILS');
         if (this.data) {
             this.expandedElement = false;
             this.data.paginator = this.paginatorCurrent;
@@ -1032,15 +1038,6 @@ let TableComponent = class TableComponent {
                 }
             });
         }
-    }
-    ngOnInit() {
-        this.service.emptyRow = this.EmptyRow;
-        this.open = this.translate.translate(this.lang, 'OPEN');
-        this.search = this.translate.translate(this.lang, 'SEARCH');
-        this.cancelSearch = this.translate.translate(this.lang, 'CANCEL_SEARCH');
-        this.noResult = this.translate.translate(this.lang, 'NO_RESULT');
-        this.details = this.translate.translate(this.lang, 'DETAILS');
-        this.init();
     }
     ngAfterViewChecked() {
         this.showTable = true;
@@ -1106,23 +1103,14 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if (changes.data && !changes.data.firstChange) {
-            console.log('OK ?????');
-            this.init();
-            this.data.fetch(0);
+        if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
+            && this.inputSearch.length < 200) {
+            if (this.data) {
+                this.data.filter(this.inputSearch);
+                this.data.fetch(0);
+                this.changeDetectorRef.markForCheck();
+            }
         }
-        if (changes.inputSearch && this.data) {
-            console.log('OK search ?????');
-            this.data.filter(this.inputSearch);
-            this.data.fetch(0);
-        }
-        /*if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-           && this.inputSearch.length < 200) {
-           if (this.data) {
-     
-     
-           }
-         }*/
         //    this.ngOnInit();
     }
 };
