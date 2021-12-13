@@ -908,10 +908,14 @@ class CoreMatTable extends DataSource {
         const rows = [];
         if (data.length) {
             data = data.slice(start * end, (start * end) + end);
+            let cursor = 1;
             if (this.emptyRow) {
                 for (const d of data) {
-                    rows.push('empty');
+                    if (rows[cursor] !== 'empty') {
+                        rows.push('empty');
+                    }
                     rows.push(d);
+                    cursor++;
                 }
                 return rows;
             }

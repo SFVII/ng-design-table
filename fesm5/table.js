@@ -987,12 +987,16 @@ var CoreMatTable = /** @class */ (function (_super) {
         var rows = [];
         if (data.length) {
             data = data.slice(start * end, (start * end) + end);
+            var cursor = 1;
             if (this.emptyRow) {
                 try {
                     for (var data_3 = __values(data), data_3_1 = data_3.next(); !data_3_1.done; data_3_1 = data_3.next()) {
                         var d = data_3_1.value;
-                        rows.push('empty');
+                        if (rows[cursor] !== 'empty') {
+                            rows.push('empty');
+                        }
                         rows.push(d);
+                        cursor++;
                     }
                 }
                 catch (e_5_1) { e_5 = { error: e_5_1 }; }
