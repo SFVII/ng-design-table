@@ -911,7 +911,7 @@ class CoreMatTable extends DataSource {
             let cursor = 1;
             if (this.emptyRow) {
                 for (const d of data) {
-                    if (rows[cursor] !== 'empty') {
+                    if (rows[cursor - 1] !== 'empty') {
                         rows.push('empty');
                     }
                     rows.push(d);

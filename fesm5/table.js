@@ -992,7 +992,7 @@ var CoreMatTable = /** @class */ (function (_super) {
                 try {
                     for (var data_3 = __values(data), data_3_1 = data_3.next(); !data_3_1.done; data_3_1 = data_3.next()) {
                         var d = data_3_1.value;
-                        if (rows[cursor] !== 'empty') {
+                        if (rows[cursor - 1] !== 'empty') {
                             rows.push('empty');
                         }
                         rows.push(d);
