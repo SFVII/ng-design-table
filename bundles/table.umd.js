@@ -980,8 +980,8 @@
             _this.pageFilter = new rxjs.BehaviorSubject('');
             _this.pageNumber = new rxjs.BehaviorSubject(_this.startWith);
             _this._totalElements.subscribe(function (page) { return _this.totalElements = page; });
-            _this.page$ = _this.pageNumber.pipe(operators.switchMap(function (page) { return _this.pageFilter.pipe(operators.debounceTime(500))
-                .pipe(operators.switchMap(function (filter) { return _this.pageFilterDate.pipe(operators.switchMap(function (range) { return _this.pageSort.pipe(operators.switchMap(function (sortAction) { return rxjs.from([{
+            _this.page$ = _this.pageSort.pipe(operators.switchMap(function (sortAction) { return _this.pageFilter.pipe(operators.debounceTime(500))
+                .pipe(operators.switchMap(function (filter) { return _this.pageFilterDate.pipe(operators.switchMap(function (range) { return _this.pageNumber.pipe(operators.switchMap(function (page) { return rxjs.from([{
                     content: _this.slice(_this.sortData(_this.filterDataObject(_this.filterData(_this.filterDateRange(_this.data, range), filter), _this.filterTable), sortAction), page, _this.size, detailRaws)
                 }]); }), operators.share()); })); })); }));
             return _this;
@@ -1083,11 +1083,8 @@
         };
         CoreMatTable.prototype.filterData = function (data, filter) {
             var e_2, _a, e_3, _b;
-            if (this.pageNumber.getValue() > 0) {
-                this.pageNumber.next(0);
-                this.number = 0;
-                console.log('filterData log');
-            }
+            if (this.number > 0)
+                this.fetch(0);
             /*if (data.length === 0 && this.data) {
               data = this.data;
             }*/
@@ -1147,11 +1144,8 @@
         };
         CoreMatTable.prototype.filterDataObject = function (data, filter) {
             var e_4, _a;
-            if (this.pageNumber.getValue() > 0) {
-                this.pageNumber.next(0);
-                this.number = 0;
-                console.log('filterDataObject log');
-            }
+            if (this.number > 0)
+                this.fetch(0);
             if (data.length === 0 && this.data) {
                 //data = this.data;
                 return data;
@@ -1220,6 +1214,7 @@
         };
         CoreMatTable.prototype.fetch = function (page) {
             this.pageNumber.next(page);
+            this.number = 0;
         };
         CoreMatTable.prototype.sortIt = function (sortidea) {
             this.pageSort.next(sortidea);

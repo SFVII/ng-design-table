@@ -743,8 +743,8 @@ class CoreMatTable extends DataSource {
         this.pageFilter = new BehaviorSubject('');
         this.pageNumber = new BehaviorSubject(this.startWith);
         this._totalElements.subscribe((page) => this.totalElements = page);
-        this.page$ = this.pageNumber.pipe(switchMap(page => this.pageFilter.pipe(debounceTime(500))
-            .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageSort.pipe(switchMap(sortAction => from([{
+        this.page$ = this.pageSort.pipe(switchMap(sortAction => this.pageFilter.pipe(debounceTime(500))
+            .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageNumber.pipe(switchMap(page => from([{
                 content: this.slice(this.sortData(this.filterDataObject(this.filterData(this.filterDateRange(this.data, range), filter), this.filterTable), sortAction), page, this.size, detailRaws)
             }])), share())))))));
         /* if (Object.keys(this.filterTable).length > 0) {
@@ -833,11 +833,8 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterData log');
-        }
+        if (this.number > 0)
+            this.fetch(0);
         /*if (data.length === 0 && this.data) {
           data = this.data;
         }*/
@@ -876,11 +873,8 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterDataObject log');
-        }
+        if (this.number > 0)
+            this.fetch(0);
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -935,6 +929,7 @@ class CoreMatTable extends DataSource {
     }
     fetch(page) {
         this.pageNumber.next(page);
+        this.number = 0;
     }
     sortIt(sortidea) {
         this.pageSort.next(sortidea);
