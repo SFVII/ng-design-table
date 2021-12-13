@@ -833,6 +833,7 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
+        console.log('MY filter data', data, filter);
         if (!filter) {
             return data;
         }
@@ -871,6 +872,7 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
+        console.log('MY filterDataObject data', data, filter);
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -1039,7 +1041,7 @@ let TableComponent = class TableComponent {
         this._inputSearch.pipe(debounceTime(500)).subscribe((search = null) => {
             console.log('Searching....', search);
             if (search) {
-                this.data.fetch(0);
+                //this.data.fetch(0);
                 this.data.filter(search);
             }
         });
@@ -1170,8 +1172,9 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if (this.inputSearch)
-            this._inputSearch.next(this.inputSearch);
+        if (this.inputSearch) {
+            this._inputSearch.next(this.inputSearch === '' ? null : this.inputSearch);
+        }
         /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
            && this.inputSearch.length < 200) {
            if (this.data) {

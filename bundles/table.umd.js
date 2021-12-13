@@ -1083,6 +1083,7 @@
         };
         CoreMatTable.prototype.filterData = function (data, filter) {
             var e_2, _a, e_3, _b;
+            console.log('MY filter data', data, filter);
             if (!filter) {
                 return data;
             }
@@ -1142,6 +1143,7 @@
         };
         CoreMatTable.prototype.filterDataObject = function (data, filter) {
             var e_4, _a;
+            console.log('MY filterDataObject data', data, filter);
             if (data.length === 0 && this.data) {
                 //data = this.data;
                 return data;
@@ -1331,7 +1333,7 @@
                 if (search === void 0) { search = null; }
                 console.log('Searching....', search);
                 if (search) {
-                    _this.data.fetch(0);
+                    //this.data.fetch(0);
                     _this.data.filter(search);
                 }
             });
@@ -1499,8 +1501,9 @@
         TableComponent.prototype.expandShow = function (template) {
         };
         TableComponent.prototype.ngOnChanges = function (changes) {
-            if (this.inputSearch)
-                this._inputSearch.next(this.inputSearch);
+            if (this.inputSearch) {
+                this._inputSearch.next(this.inputSearch === '' ? null : this.inputSearch);
+            }
             /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
                && this.inputSearch.length < 200) {
                if (this.data) {
