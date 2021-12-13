@@ -6,7 +6,6 @@ import { CoreMatTable, CoreMatTableInterface, FilterDateInterface, Page, PageReq
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from './table.service';
 import { TranslateService } from './translate.service';
-import { BehaviorSubject } from 'rxjs';
 interface displayColumnsConfig {
     sizeIcon?: number;
     displayYes?: boolean;
@@ -47,7 +46,7 @@ declare class TableComponent implements OnInit, OnChanges {
     lang: string;
     btnOverride: boolean;
     callFunction: EventEmitter<any>;
-    inputSearch: BehaviorSubject<string>;
+    inputSearch: string;
     EmptyRow: boolean;
     blockDetails: boolean;
     clicked: EventEmitter<{
@@ -65,6 +64,7 @@ declare class TableComponent implements OnInit, OnChanges {
     noResult: string;
     details: string;
     showTable: boolean;
+    private _inputSearch;
     private PrivateColumnDefinitions;
     constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService, changeDetectorRef: ChangeDetectorRef);
     expand(element: any): void;

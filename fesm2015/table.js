@@ -1017,7 +1017,7 @@ let TableComponent = class TableComponent {
         this.displayDetail = false;
         this.btnOverride = false;
         this.callFunction = new EventEmitter();
-        this.inputSearch = new BehaviorSubject('');
+        this.inputSearch = null;
         this.EmptyRow = false;
         this.blockDetails = false;
         this.clicked = new EventEmitter();
@@ -1029,7 +1029,8 @@ let TableComponent = class TableComponent {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
-        this.inputSearch.pipe(debounceTime(500)).subscribe((search = null) => {
+        this._inputSearch = new BehaviorSubject('');
+        this._inputSearch.pipe(debounceTime(500)).subscribe((search = null) => {
             console.log('Searching....', search);
             if (search) {
                 this.data.fetch(0);
@@ -1163,6 +1164,8 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
+        if (this.inputSearch)
+            this._inputSearch.next(this.inputSearch);
         /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
            && this.inputSearch.length < 200) {
            if (this.data) {
@@ -1222,7 +1225,7 @@ __decorate([
 ], TableComponent.prototype, "callFunction", void 0);
 __decorate([
     Input(),
-    __metadata("design:type", BehaviorSubject)
+    __metadata("design:type", String)
 ], TableComponent.prototype, "inputSearch", void 0);
 __decorate([
     Input(),

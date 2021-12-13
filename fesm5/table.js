@@ -1098,7 +1098,7 @@ var TableComponent = /** @class */ (function () {
         this.displayDetail = false;
         this.btnOverride = false;
         this.callFunction = new EventEmitter();
-        this.inputSearch = new BehaviorSubject('');
+        this.inputSearch = null;
         this.EmptyRow = false;
         this.blockDetails = false;
         this.clicked = new EventEmitter();
@@ -1110,7 +1110,8 @@ var TableComponent = /** @class */ (function () {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
-        this.inputSearch.pipe(debounceTime(500)).subscribe(function (search) {
+        this._inputSearch = new BehaviorSubject('');
+        this._inputSearch.pipe(debounceTime(500)).subscribe(function (search) {
             if (search === void 0) { search = null; }
             console.log('Searching....', search);
             if (search) {
@@ -1282,6 +1283,8 @@ var TableComponent = /** @class */ (function () {
     TableComponent.prototype.expandShow = function (template) {
     };
     TableComponent.prototype.ngOnChanges = function (changes) {
+        if (this.inputSearch)
+            this._inputSearch.next(this.inputSearch);
         /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
            && this.inputSearch.length < 200) {
            if (this.data) {
@@ -1340,7 +1343,7 @@ var TableComponent = /** @class */ (function () {
     ], TableComponent.prototype, "callFunction", void 0);
     __decorate([
         Input(),
-        __metadata("design:type", BehaviorSubject)
+        __metadata("design:type", String)
     ], TableComponent.prototype, "inputSearch", void 0);
     __decorate([
         Input(),
