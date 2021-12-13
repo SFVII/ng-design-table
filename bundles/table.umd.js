@@ -1083,6 +1083,9 @@
         };
         CoreMatTable.prototype.filterData = function (data, filter) {
             var e_2, _a, e_3, _b;
+            if (!filter) {
+                return data;
+            }
             var result = [];
             if (typeof filter === 'object') {
                 return this.filterDataObject(data, filter);
@@ -1141,6 +1144,9 @@
             var e_4, _a;
             if (data.length === 0 && this.data) {
                 //data = this.data;
+                return data;
+            }
+            if (!filter) {
                 return data;
             }
             var result = [];

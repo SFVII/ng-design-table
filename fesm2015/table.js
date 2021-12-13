@@ -833,6 +833,9 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
+        if (!filter) {
+            return data;
+        }
         const result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -870,6 +873,9 @@ class CoreMatTable extends DataSource {
     filterDataObject(data, filter) {
         if (data.length === 0 && this.data) {
             //data = this.data;
+            return data;
+        }
+        if (!filter) {
             return data;
         }
         const result = [];
