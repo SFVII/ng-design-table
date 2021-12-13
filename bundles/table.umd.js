@@ -1160,15 +1160,14 @@
         CoreMatTable.prototype.fetch = function (page) {
             this.pageNumber.next(page);
             this.number = page;
-            this.paginator.pageIndex = page;
         };
-        CoreMatTable.prototype.sortIt = function (sortidea) {
-            this.pageSort.next(sortidea);
+        CoreMatTable.prototype.sortIt = function (sortIdea) {
+            this.pageSort.next(sortIdea);
         };
         CoreMatTable.prototype.filter = function (myFilter) {
-            if (!myFilter && this.data || !myFilter.trim() && this.data) {
-                this._totalElements.next(this.data.length);
-            }
+            /* if (!myFilter && this.data || !myFilter.trim() && this.data) {
+               this._totalElements.next(this.data.length);
+             }*/
             this.pageFilter.next(myFilter.toString());
             /*if (!myFilter.target.value || !myFilter.target.value.trim()) {
               this.totalElements = this.data.length;
@@ -1442,12 +1441,10 @@
         TableComponent.prototype.expandShow = function (template) {
         };
         TableComponent.prototype.ngOnChanges = function (changes) {
-            if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-                && this.inputSearch.length < 200) {
-                if (this.data) {
-                    this.data.filter(this.inputSearch);
-                    this.data.fetch(0);
-                }
+            console.log(changes);
+            if (changes.inputSearch) {
+                this.data.filter(this.inputSearch);
+                this.data.fetch(0);
             }
             //    this.ngOnInit();
         };

@@ -875,15 +875,14 @@ class CoreMatTable extends DataSource {
     fetch(page) {
         this.pageNumber.next(page);
         this.number = page;
-        this.paginator.pageIndex = page;
     }
-    sortIt(sortidea) {
-        this.pageSort.next(sortidea);
+    sortIt(sortIdea) {
+        this.pageSort.next(sortIdea);
     }
     filter(myFilter) {
-        if (!myFilter && this.data || !myFilter.trim() && this.data) {
-            this._totalElements.next(this.data.length);
-        }
+        /* if (!myFilter && this.data || !myFilter.trim() && this.data) {
+           this._totalElements.next(this.data.length);
+         }*/
         this.pageFilter.next(myFilter.toString());
         /*if (!myFilter.target.value || !myFilter.target.value.trim()) {
           this.totalElements = this.data.length;
@@ -1104,12 +1103,10 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-            && this.inputSearch.length < 200) {
-            if (this.data) {
-                this.data.filter(this.inputSearch);
-                this.data.fetch(0);
-            }
+        console.log(changes);
+        if (changes.inputSearch) {
+            this.data.filter(this.inputSearch);
+            this.data.fetch(0);
         }
         //    this.ngOnInit();
     }
