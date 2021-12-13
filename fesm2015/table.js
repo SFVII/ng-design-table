@@ -880,9 +880,9 @@ class CoreMatTable extends DataSource {
         this.pageSort.next(sortIdea);
     }
     filter(myFilter) {
-        /* if (!myFilter && this.data || !myFilter.trim() && this.data) {
-           this._totalElements.next(this.data.length);
-         }*/
+        if (!myFilter && this.data || !myFilter.trim() && this.data) {
+            this._totalElements.next(this.data.length);
+        }
         this.pageFilter.next(myFilter.toString());
         /*if (!myFilter.target.value || !myFilter.target.value.trim()) {
           this.totalElements = this.data.length;
