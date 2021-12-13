@@ -743,8 +743,8 @@ class CoreMatTable extends DataSource {
         this.pageFilter = new BehaviorSubject('');
         this.pageNumber = new BehaviorSubject(this.startWith);
         this._totalElements.subscribe((page) => this.totalElements = page);
-        this.page$ = this.pageSort.pipe(switchMap(sortAction => this.pageFilter.pipe(debounceTime(500))
-            .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageNumber.pipe(switchMap(page => from([{
+        this.page$ = this.pageNumber.pipe(switchMap(page => this.pageFilter.pipe(debounceTime(500))
+            .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageSort.pipe(switchMap(sortAction => from([{
                 content: this.slice(this.sortData(this.filterDataObject(this.filterData(this.filterDateRange(this.data, range), filter), this.filterTable), sortAction), page, this.size, detailRaws)
             }])), share())))))));
         /* if (Object.keys(this.filterTable).length > 0) {
