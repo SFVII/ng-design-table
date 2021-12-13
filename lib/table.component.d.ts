@@ -22,7 +22,13 @@ interface displayedColumnsInterface {
     display?: string;
     align?: string;
     sort?: boolean;
+    clickable?: boolean;
+    statement?: boolean;
+    valueStatement?: string[];
     config?: displayColumnsConfig;
+    valueOverride?: {
+        [key: string]: string;
+    };
 }
 declare class TableComponent implements OnInit, OnChanges {
     private router;
@@ -30,6 +36,7 @@ declare class TableComponent implements OnInit, OnChanges {
     private service;
     private detector;
     private translate;
+    private changeDetectorRef;
     paginatorCurrent: MatPaginator;
     sortCurrent: MatSort;
     columnDefinitions: [displayedColumnsInterface];
@@ -42,19 +49,23 @@ declare class TableComponent implements OnInit, OnChanges {
     inputSearch: string;
     EmptyRow: boolean;
     blockDetails: boolean;
+    clicked: EventEmitter<{
+        key: string;
+        statement: boolean;
+    }>;
     columnsToDisplay: string[];
     filter: Array<string>;
     displayedColumns: any;
     expandedElement: any;
     index: number;
-    private PrivateColumnDefinitions;
     open: string;
     search: string;
     cancelSearch: string;
     noResult: string;
     details: string;
     showTable: boolean;
-    constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService);
+    private PrivateColumnDefinitions;
+    constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService, changeDetectorRef: ChangeDetectorRef);
     expand(element: any): void;
     ngOnInit(): void;
     ngAfterViewChecked(): void;
