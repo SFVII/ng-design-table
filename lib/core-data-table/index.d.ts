@@ -1,7 +1,7 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { DataSource } from '@angular/cdk/collections';
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { DataSource } from "@angular/cdk/collections";
 export interface Sort {
     active: string;
     direction: 'asc' | 'desc';
