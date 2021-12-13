@@ -1120,8 +1120,12 @@ let TableComponent = class TableComponent {
                 this.data.fetch(0);
             }
         }
-        this.changeDetectorRef.markForCheck();
-        //    this.ngOnInit();
+        //this.changeDetectorRef.markForCheck();
+        if (changes.data.isFirstChange()) {
+            console.log('Init init');
+            this.ngOnInit();
+        }
+        //
     }
 };
 TableComponent.ctorParameters = () => [
