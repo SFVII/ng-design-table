@@ -1106,14 +1106,15 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if (changes.data && changes.data.firstChange) {
+        if (changes.data && !changes.data.firstChange) {
             console.log('OK ?????');
             this.init();
             this.data.fetch(0);
         }
-        if (changes.inputSearch) {
+        if (changes.inputSearch && this.data) {
             console.log('OK search ?????');
             this.data.filter(this.inputSearch);
+            this.data.fetch(0);
         }
         /*if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
            && this.inputSearch.length < 200) {
