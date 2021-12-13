@@ -1052,7 +1052,6 @@ var TranslateService = /** @class */ (function () {
 
 var TableComponent = /** @class */ (function () {
     function TableComponent(router, route, service, detector, translate, changeDetectorRef) {
-        var _this = this;
         this.router = router;
         this.route = route;
         this.service = service;
@@ -1074,27 +1073,6 @@ var TableComponent = /** @class */ (function () {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
-        this.data.pageNumber.subscribe(function (newpage) {
-            if (newpage > 0) {
-                _this.router.navigate([], {
-                    relativeTo: _this.route,
-                    queryParams: { page: newpage + 1 },
-                    queryParamsHandling: 'merge',
-                });
-            }
-            else if (newpage === 0) {
-                _this.router.navigate([], {
-                    relativeTo: _this.route,
-                    queryParams: { page: null },
-                    queryParamsHandling: 'merge',
-                });
-            }
-            if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
-                // this.data.paginator.pageIndex = newpage;
-                console.log('on passe dans la ligne 146', _this.data.paginator.pageIndex, newpage);
-            }
-            _this.changeDetectorRef.markForCheck();
-        });
     }
     TableComponent.prototype.expand = function (element) {
         if (this.blockDetails) {
@@ -1120,6 +1098,27 @@ var TableComponent = /** @class */ (function () {
             this.expandedElement = false;
             this.data.paginator = this.paginatorCurrent;
             this.data.sort = this.sortCurrent;
+            this.data.pageNumber.subscribe(function (newpage) {
+                if (newpage > 0) {
+                    _this.router.navigate([], {
+                        relativeTo: _this.route,
+                        queryParams: { page: newpage + 1 },
+                        queryParamsHandling: 'merge',
+                    });
+                }
+                else if (newpage === 0) {
+                    _this.router.navigate([], {
+                        relativeTo: _this.route,
+                        queryParams: { page: null },
+                        queryParamsHandling: 'merge',
+                    });
+                }
+                if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
+                    // this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146', _this.data.paginator.pageIndex, newpage);
+                }
+                _this.changeDetectorRef.markForCheck();
+            });
             var page = this.route.snapshot.queryParams['page'];
             if (page) {
                 var currentPage = Number(page) - 1;

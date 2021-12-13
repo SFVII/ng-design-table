@@ -982,27 +982,6 @@ let TableComponent = class TableComponent {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
-        this.data.pageNumber.subscribe((newpage) => {
-            if (newpage > 0) {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { page: newpage + 1 },
-                    queryParamsHandling: 'merge',
-                });
-            }
-            else if (newpage === 0) {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { page: null },
-                    queryParamsHandling: 'merge',
-                });
-            }
-            if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
-                // this.data.paginator.pageIndex = newpage;
-                console.log('on passe dans la ligne 146', this.data.paginator.pageIndex, newpage);
-            }
-            this.changeDetectorRef.markForCheck();
-        });
     }
     expand(element) {
         if (this.blockDetails) {
@@ -1027,6 +1006,27 @@ let TableComponent = class TableComponent {
             this.expandedElement = false;
             this.data.paginator = this.paginatorCurrent;
             this.data.sort = this.sortCurrent;
+            this.data.pageNumber.subscribe((newpage) => {
+                if (newpage > 0) {
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { page: newpage + 1 },
+                        queryParamsHandling: 'merge',
+                    });
+                }
+                else if (newpage === 0) {
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { page: null },
+                        queryParamsHandling: 'merge',
+                    });
+                }
+                if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
+                    // this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146', this.data.paginator.pageIndex, newpage);
+                }
+                this.changeDetectorRef.markForCheck();
+            });
             const page = this.route.snapshot.queryParams['page'];
             if (page) {
                 const currentPage = Number(page) - 1;
