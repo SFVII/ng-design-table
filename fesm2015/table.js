@@ -915,12 +915,12 @@ class CoreMatTable extends DataSource {
                         rows.push('empty');
                     }
                     rows.push(d);
-                    cursor += 2;
+                    cursor++;
                 }
                 return rows;
             }
             this._totalElements.next(this.dataAfterSearch.length);
-            return data;
+            return rows;
         }
         else {
             this._totalElements.next(this.dataAfterSearch.length);

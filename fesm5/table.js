@@ -996,7 +996,7 @@ var CoreMatTable = /** @class */ (function (_super) {
                             rows.push('empty');
                         }
                         rows.push(d);
-                        cursor += 2;
+                        cursor++;
                     }
                 }
                 catch (e_5_1) { e_5 = { error: e_5_1 }; }
@@ -1009,7 +1009,7 @@ var CoreMatTable = /** @class */ (function (_super) {
                 return rows;
             }
             this._totalElements.next(this.dataAfterSearch.length);
-            return data;
+            return rows;
         }
         else {
             this._totalElements.next(this.dataAfterSearch.length);
