@@ -917,6 +917,7 @@ var CoreMatTable = /** @class */ (function (_super) {
                 }
                 finally { if (e_4) throw e_4.error; }
             }
+            this.dataAfterSearch = result;
             return result;
             //return result.filter((e => e.pond)).sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
         }
@@ -997,11 +998,11 @@ var CoreMatTable = /** @class */ (function (_super) {
                 }
                 return rows;
             }
-            this._totalElements.next(data.length);
+            this._totalElements.next(this.dataAfterSearch.length);
             return data;
         }
         else {
-            this._totalElements.next(data.length);
+            this._totalElements.next(this.dataAfterSearch.length);
             return data;
         }
     };
