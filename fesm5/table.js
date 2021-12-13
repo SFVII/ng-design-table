@@ -955,9 +955,9 @@ var CoreMatTable = /** @class */ (function (_super) {
         this.pageSort.next(sortIdea);
     };
     CoreMatTable.prototype.filter = function (myFilter) {
-        if (!myFilter && this.data || !myFilter.trim() && this.data) {
-            this._totalElements.next(this.data.length);
-        }
+        /* if (!myFilter && this.data || !myFilter.trim() && this.data) {
+           this._totalElements.next(this.data.length);
+         }*/
         this.pageFilter.next(myFilter.toString());
         /*if (!myFilter.target.value || !myFilter.target.value.trim()) {
           this.totalElements = this.data.length;
@@ -1076,14 +1076,8 @@ var TableComponent = /** @class */ (function () {
         }
         console.log(this.expandedElement);
     };
-    TableComponent.prototype.ngOnInit = function () {
+    TableComponent.prototype.init = function () {
         var _this = this;
-        this.service.emptyRow = this.EmptyRow;
-        this.open = this.translate.translate(this.lang, 'OPEN');
-        this.search = this.translate.translate(this.lang, 'SEARCH');
-        this.cancelSearch = this.translate.translate(this.lang, 'CANCEL_SEARCH');
-        this.noResult = this.translate.translate(this.lang, 'NO_RESULT');
-        this.details = this.translate.translate(this.lang, 'DETAILS');
         if (this.data) {
             this.expandedElement = false;
             this.data.paginator = this.paginatorCurrent;
@@ -1130,6 +1124,15 @@ var TableComponent = /** @class */ (function () {
                 }
             });
         }
+    };
+    TableComponent.prototype.ngOnInit = function () {
+        this.service.emptyRow = this.EmptyRow;
+        this.open = this.translate.translate(this.lang, 'OPEN');
+        this.search = this.translate.translate(this.lang, 'SEARCH');
+        this.cancelSearch = this.translate.translate(this.lang, 'CANCEL_SEARCH');
+        this.noResult = this.translate.translate(this.lang, 'NO_RESULT');
+        this.details = this.translate.translate(this.lang, 'DETAILS');
+        this.init();
     };
     TableComponent.prototype.ngAfterViewChecked = function () {
         this.showTable = true;
@@ -1231,11 +1234,22 @@ var TableComponent = /** @class */ (function () {
     TableComponent.prototype.expandShow = function (template) {
     };
     TableComponent.prototype.ngOnChanges = function (changes) {
-        console.log(changes);
+        if (changes.data && changes.data.firstChange) {
+            console.log('OK ?????');
+            this.init();
+        }
         if (changes.inputSearch) {
+            console.log('OK search ?????');
             this.data.filter(this.inputSearch);
             this.data.fetch(0);
         }
+        /*if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
+           && this.inputSearch.length < 200) {
+           if (this.data) {
+     
+     
+           }
+         }*/
         //    this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [

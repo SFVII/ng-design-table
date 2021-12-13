@@ -67,6 +67,7 @@ declare class TableComponent implements OnInit, OnChanges {
     private PrivateColumnDefinitions;
     constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService, changeDetectorRef: ChangeDetectorRef);
     expand(element: any): void;
+    init(): void;
     ngOnInit(): void;
     ngAfterViewChecked(): void;
     buildHeaders(): Promise<void>;
