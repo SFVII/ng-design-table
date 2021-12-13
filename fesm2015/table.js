@@ -929,17 +929,17 @@ class CoreMatTable extends DataSource {
         return (((Array.isArray(a) ? a.length : a) > ((Array.isArray(b) ? b.length : b)) ? -1 : ((Array.isArray(b) ? b.length : b)) > ((Array.isArray(a) ? a.length : a)) ? 1 : 0) * (isAsc ? -1 : 1));
     }
     fetch(page) {
-        if (this.number !== page) {
+        if (this.pageNumber.getValue() !== page) {
             this.number = page;
             this.pageNumber.next(page);
-            // this.paginator.pageIndex = page;
+            this.paginator.pageIndex = page;
         }
         else {
             console.log('Same page  old %d / new %d', this.number, page);
         }
     }
-    sortIt(sortidea) {
-        this.pageSort.next(sortidea);
+    sortIt(sortIdea) {
+        this.pageSort.next(sortIdea);
     }
     filter(myFilter) {
         if (!myFilter && this.data || !myFilter.trim() && this.data) {

@@ -63,7 +63,7 @@ export declare class CoreMatTable extends DataSource<Element> {
     sortData(data: any, sortAction: any): any;
     compare(a: number | string | any[], b: number | string | any[], isAsc: boolean): number;
     fetch(page: number): void;
-    sortIt(sortidea: any): void;
+    sortIt(sortIdea: any): void;
     filter(myFilter: any): void;
     filterDate(dateFilter: FilterDateInterface): void;
     connect(): Observable<any>;
