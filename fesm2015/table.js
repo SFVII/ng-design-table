@@ -466,21 +466,20 @@ let PhoneDisplayComponent = class PhoneDisplayComponent {
         this.ngOnInit();
     }
     normalize(str) {
-        str = (str || '').replace(/[^\d]/g, "");
+        str = (str || '').replace(/[^\d]/g, '');
         if (str.length == 10) {
-            //reformat and return phone number
-            return str.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "(+33) $1.$2.$3.$4.$5");
+            return str.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '(+33) $1.$2.$3.$4.$5');
         }
         else if (str.length > 10 && str.length <= 13) {
             if (str.length === 11) {
                 str = '0' + str;
             }
-            if (str.length === 13 && str.includes('+')) {
-                let tmp = str.slice(0, 3);
-                let end = str.slice(3, str.length);
-                str = tmp + '0' + end;
+            if (str.length === 12 && str.includes('+')) {
+                const tmp = str.slice(0, 3);
+                const end = str.slice(3, str.length);
+                str = tmp + end;
             }
-            return str.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "(+$1) $2.$3.$4.$5.$6");
+            return str.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '(+$1) $2.$3.$4.$5.$6');
         }
         return null;
     }
@@ -983,6 +982,27 @@ let TableComponent = class TableComponent {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
+        this.data.pageNumber.subscribe((newpage) => {
+            if (newpage > 0) {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { page: newpage + 1 },
+                    queryParamsHandling: 'merge',
+                });
+            }
+            else if (newpage === 0) {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { page: null },
+                    queryParamsHandling: 'merge',
+                });
+            }
+            if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
+                // this.data.paginator.pageIndex = newpage;
+                console.log('on passe dans la ligne 146', this.data.paginator.pageIndex, newpage);
+            }
+            this.changeDetectorRef.markForCheck();
+        });
     }
     expand(element) {
         if (this.blockDetails) {
@@ -1007,27 +1027,6 @@ let TableComponent = class TableComponent {
             this.expandedElement = false;
             this.data.paginator = this.paginatorCurrent;
             this.data.sort = this.sortCurrent;
-            this.data.pageNumber.subscribe((newpage) => {
-                if (newpage > 0) {
-                    this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { page: newpage + 1 },
-                        queryParamsHandling: 'merge',
-                    });
-                }
-                else if (newpage === 0) {
-                    this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { page: null },
-                        queryParamsHandling: 'merge',
-                    });
-                }
-                if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
-                    // this.data.paginator.pageIndex = newpage;
-                    console.log('on passe dans la ligne 146', this.data.paginator.pageIndex, newpage);
-                }
-                this.changeDetectorRef.markForCheck();
-            });
             const page = this.route.snapshot.queryParams['page'];
             if (page) {
                 const currentPage = Number(page) - 1;
