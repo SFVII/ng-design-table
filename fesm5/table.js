@@ -873,10 +873,11 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterData = function (data, filter) {
         var e_2, _a, e_3, _b;
-        console.log('MY filter data', data, filter);
-        if (!filter) {
-            return data;
-        }
+        if (this.number > 0)
+            this.fetch(0);
+        /*if (data.length === 0 && this.data) {
+          data = this.data;
+        }*/
         var result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -933,12 +934,10 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterDataObject = function (data, filter) {
         var e_4, _a;
-        console.log('MY filterDataObject data', data, filter);
+        if (this.number > 0)
+            this.fetch(0);
         if (data.length === 0 && this.data) {
             //data = this.data;
-            return data;
-        }
-        if (!filter) {
             return data;
         }
         var result = [];
@@ -1004,17 +1003,16 @@ var CoreMatTable = /** @class */ (function (_super) {
         return (((Array.isArray(a) ? a.length : a) > ((Array.isArray(b) ? b.length : b)) ? -1 : ((Array.isArray(b) ? b.length : b)) > ((Array.isArray(a) ? a.length : a)) ? 1 : 0) * (isAsc ? -1 : 1));
     };
     CoreMatTable.prototype.fetch = function (page) {
-        if (this.pageNumber.getValue() !== page) {
-            this.number = page;
+        if (this.number !== page) {
+            this.number = 0;
             this.pageNumber.next(page);
-            this.paginator.pageIndex = page;
         }
         else {
-            console.log('Same page  old %d / new %d', this.number, page);
+            console.log('Same page  %d / new %d', this.number, page);
         }
     };
-    CoreMatTable.prototype.sortIt = function (sortIdea) {
-        this.pageSort.next(sortIdea);
+    CoreMatTable.prototype.sortIt = function (sortidea) {
+        this.pageSort.next(sortidea);
     };
     CoreMatTable.prototype.filter = function (myFilter) {
         if (!myFilter && this.data || !myFilter.trim() && this.data) {
