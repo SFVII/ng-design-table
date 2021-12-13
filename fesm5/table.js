@@ -873,9 +873,6 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterData = function (data, filter) {
         var e_2, _a, e_3, _b;
-        if (this.number > 0) {
-            this.fetch(0);
-        }
         var result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -932,9 +929,6 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterDataObject = function (data, filter) {
         var e_4, _a;
-        if (this.number > 0) {
-            this.fetch(0);
-        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -1094,6 +1088,7 @@ var TranslateService = /** @class */ (function () {
 
 var TableComponent = /** @class */ (function () {
     function TableComponent(router, route, service, detector, translate, changeDetectorRef) {
+        var _this = this;
         this.router = router;
         this.route = route;
         this.service = service;
@@ -1103,7 +1098,7 @@ var TableComponent = /** @class */ (function () {
         this.displayDetail = false;
         this.btnOverride = false;
         this.callFunction = new EventEmitter();
-        this.inputSearch = '';
+        this.inputSearch = new BehaviorSubject('');
         this.EmptyRow = false;
         this.blockDetails = false;
         this.clicked = new EventEmitter();
@@ -1115,6 +1110,14 @@ var TableComponent = /** @class */ (function () {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
+        this.inputSearch.pipe(debounceTime(500)).subscribe(function (search) {
+            if (search === void 0) { search = null; }
+            console.log('Searching....', search);
+            if (search) {
+                _this.data.fetch(0);
+                _this.data.filter(search);
+            }
+        });
     }
     TableComponent.prototype.expand = function (element) {
         if (this.blockDetails) {
@@ -1158,7 +1161,7 @@ var TableComponent = /** @class */ (function () {
                 }
                 _this.changeDetectorRef.markForCheck();
             });
-            var page = this.route.snapshot.queryParams["page"];
+            var page = this.route.snapshot.queryParams['page'];
             if (page) {
                 var currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
@@ -1279,17 +1282,17 @@ var TableComponent = /** @class */ (function () {
     TableComponent.prototype.expandShow = function (template) {
     };
     TableComponent.prototype.ngOnChanges = function (changes) {
-        if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-            && this.inputSearch.length < 200) {
-            if (this.data) {
-                this.data.filter(this.inputSearch);
-                this.data.pageNumber.next(0);
-                this.data.fetch(0);
-                this.data.number = 0;
-                this.changeDetectorRef.markForCheck();
-            }
-        }
-        this.ngOnInit();
+        /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
+           && this.inputSearch.length < 200) {
+           if (this.data) {
+             this.data.filter(this.inputSearch);
+             this.data.pageNumber.next(0);
+             this.data.fetch(0);
+             this.data.number = 0;
+             this.changeDetectorRef.markForCheck();
+           }
+         }*/
+        // this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [
         { type: Router },
@@ -1337,7 +1340,7 @@ var TableComponent = /** @class */ (function () {
     ], TableComponent.prototype, "callFunction", void 0);
     __decorate([
         Input(),
-        __metadata("design:type", Object)
+        __metadata("design:type", BehaviorSubject)
     ], TableComponent.prototype, "inputSearch", void 0);
     __decorate([
         Input(),

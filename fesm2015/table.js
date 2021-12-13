@@ -833,9 +833,6 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
-        if (this.number > 0) {
-            this.fetch(0);
-        }
         const result = [];
         if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
@@ -871,9 +868,6 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
-        if (this.number > 0) {
-            this.fetch(0);
-        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -1023,7 +1017,7 @@ let TableComponent = class TableComponent {
         this.displayDetail = false;
         this.btnOverride = false;
         this.callFunction = new EventEmitter();
-        this.inputSearch = '';
+        this.inputSearch = new BehaviorSubject('');
         this.EmptyRow = false;
         this.blockDetails = false;
         this.clicked = new EventEmitter();
@@ -1035,6 +1029,13 @@ let TableComponent = class TableComponent {
         this.noResult = '';
         this.details = '';
         this.showTable = false;
+        this.inputSearch.pipe(debounceTime(500)).subscribe((search = null) => {
+            console.log('Searching....', search);
+            if (search) {
+                this.data.fetch(0);
+                this.data.filter(search);
+            }
+        });
     }
     expand(element) {
         if (this.blockDetails) {
@@ -1077,7 +1078,7 @@ let TableComponent = class TableComponent {
                 }
                 this.changeDetectorRef.markForCheck();
             });
-            const page = this.route.snapshot.queryParams["page"];
+            const page = this.route.snapshot.queryParams['page'];
             if (page) {
                 const currentPage = Number(page) - 1;
                 this.data.startWith = currentPage;
@@ -1162,17 +1163,17 @@ let TableComponent = class TableComponent {
     expandShow(template) {
     }
     ngOnChanges(changes) {
-        if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
-            && this.inputSearch.length < 200) {
-            if (this.data) {
-                this.data.filter(this.inputSearch);
-                this.data.pageNumber.next(0);
-                this.data.fetch(0);
-                this.data.number = 0;
-                this.changeDetectorRef.markForCheck();
-            }
-        }
-        this.ngOnInit();
+        /* if ((this.inputSearch.length > 1 || this.inputSearch.length === 0)
+           && this.inputSearch.length < 200) {
+           if (this.data) {
+             this.data.filter(this.inputSearch);
+             this.data.pageNumber.next(0);
+             this.data.fetch(0);
+             this.data.number = 0;
+             this.changeDetectorRef.markForCheck();
+           }
+         }*/
+        // this.ngOnInit();
     }
 };
 TableComponent.ctorParameters = () => [
@@ -1221,7 +1222,7 @@ __decorate([
 ], TableComponent.prototype, "callFunction", void 0);
 __decorate([
     Input(),
-    __metadata("design:type", Object)
+    __metadata("design:type", BehaviorSubject)
 ], TableComponent.prototype, "inputSearch", void 0);
 __decorate([
     Input(),
