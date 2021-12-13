@@ -747,57 +747,6 @@ class CoreMatTable extends DataSource {
             .pipe(switchMap(filter => this.pageFilterDate.pipe(switchMap(range => this.pageNumber.pipe(switchMap(page => from([{
                 content: this.slice(this.sortData(this.filterDataObject(this.filterData(this.filterDateRange(this.data, range), filter), this.filterTable), sortAction), page, this.size, detailRaws)
             }])), share())))))));
-        /* if (Object.keys(this.filterTable).length > 0) {
-           this.page$ = this.page$.pipe(
-             switchMap(sortAction2 => this.pageFilter.pipe(debounceTime(500))
-               .pipe(
-                 switchMap(filter => this.pageFilterDate.pipe(
-                   switchMap(range2 => this.pageNumber.pipe(
-                     switchMap(page2 => from([{
-                       content: this.slice(
-                         this.sortData(
-                           this.filterDataObject(
-                             this.filterDateRange(
-                               this.dataAfterSearch, range2
-                             ), this.filterTable
-                           ), sortAction2
-                         ), page2, this.size, detailRaws)
-                     }])), share())
-                   ))
-                 ))));
-         }
-     
-         /*
-     
-         (likes: any[]) => {
-            return likes.length === 0 ?
-              Observable.of(likes) :
-              Observable.combineLatest(
-                likes.map(like => this.af.database.object("/citations/" + like.$key))
-            )
-          }
-     
-         this.page$ = this.pageFilterDate.pipe(
-            startWith(rangeRules),
-            switchMap(range => this.pageFilter.pipe(debounceTime(500)).pipe(
-              startWith(''),
-              switchMap(filter => this.pageSort.pipe(
-                startWith(sortRules),
-                switchMap(sortAction => this.pageNumber.pipe(
-                  startWith(this.startWith),
-                  switchMap(page => from([{
-                    content: this.slice(
-                      this.sortData(
-                        this.filterData(
-                          this.filterDateRange(
-                            this.data, range
-                          ), filter
-                        ), sortAction
-                      ), page, this.size, detailRaws)
-                  }])),
-                  share()
-                ))))
-            )));*/
     }
     filterDateRange(data, range) {
         if (!range || (!range.valueStart && !range.valueEnd)) {
@@ -833,24 +782,19 @@ class CoreMatTable extends DataSource {
         return pond;
     }
     filterData(data, filter) {
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterData log');
+        if (data.length === 0 && this.data) {
+            data = this.data;
         }
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
         const result = [];
-        if (typeof filter === "object") {
+        if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
         }
-        else if (filter && filter.replace(/[^a-zA-Z ]/g, " ")) {
+        else if (filter && filter.replace(/[^a-zA-Z ]/g, ' ')) {
             for (let e of data) {
                 e.pond = 0;
                 const dataRaw = JSON.stringify(e).toLowerCase()
-                    .replace(/[^a-zA-Z0-9 ]/g, " ");
-                const stack = filter.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, " ")
+                    .replace(/[^a-zA-Z0-9 ]/g, ' ');
+                const stack = filter.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, ' ')
                     .split(' ');
                 let combination = 0;
                 for (let k of stack) {
@@ -876,11 +820,6 @@ class CoreMatTable extends DataSource {
         }
     }
     filterDataObject(data, filter) {
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterDataObject log');
-        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -935,6 +874,8 @@ class CoreMatTable extends DataSource {
     }
     fetch(page) {
         this.pageNumber.next(page);
+        this.number = page;
+        this.paginator.pageIndex = page;
     }
     sortIt(sortidea) {
         this.pageSort.next(sortidea);
@@ -959,28 +900,21 @@ class CoreMatTable extends DataSource {
     }
     slice(data, start = 0, end = 20, detailRow = true) {
         const rows = [];
-        this._totalElements.next(data.length);
         if (data.length) {
             data = data.slice(start * end, (start * end) + end);
             if (this.emptyRow) {
-                data.forEach((d) => {
+                for (const d of data) {
                     rows.push('empty');
                     rows.push(d);
-                });
+                }
                 return rows;
             }
+            this._totalElements.next(data.length);
             return data;
         }
         else {
-            data = data.slice(start * end, (start * end) + end);
-            if (this.emptyRow) {
-                data.forEach((d) => {
-                    rows.push('empty');
-                    rows.push(d);
-                });
-                return rows;
-            }
-            return rows;
+            this._totalElements.next(data.length);
+            return data;
         }
     }
 }
@@ -1078,14 +1012,12 @@ let TableComponent = class TableComponent {
                         queryParams: { page: null },
                         queryParamsHandling: 'merge',
                     });
-                    this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 142');
                 }
                 if (this.data && this.data.paginator && this.data.paginator.pageIndex !== newpage) {
-                    this.data.paginator.pageIndex = newpage;
-                    this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 146');
+                    // this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146', this.data.paginator.pageIndex, newpage);
                 }
+                this.changeDetectorRef.markForCheck();
             });
             const page = this.route.snapshot.queryParams["page"];
             if (page) {
@@ -1176,13 +1108,10 @@ let TableComponent = class TableComponent {
             && this.inputSearch.length < 200) {
             if (this.data) {
                 this.data.filter(this.inputSearch);
-                this.data.pageNumber.next(0);
                 this.data.fetch(0);
-                this.data.number = 0;
-                this.changeDetectorRef.markForCheck();
             }
         }
-        this.ngOnInit();
+        //    this.ngOnInit();
     }
 };
 TableComponent.ctorParameters = () => [

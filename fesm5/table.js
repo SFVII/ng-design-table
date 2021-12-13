@@ -775,57 +775,6 @@ var CoreMatTable = /** @class */ (function (_super) {
                 content: _this.slice(_this.sortData(_this.filterDataObject(_this.filterData(_this.filterDateRange(_this.data, range), filter), _this.filterTable), sortAction), page, _this.size, detailRaws)
             }]); }), share()); })); })); }));
         return _this;
-        /* if (Object.keys(this.filterTable).length > 0) {
-           this.page$ = this.page$.pipe(
-             switchMap(sortAction2 => this.pageFilter.pipe(debounceTime(500))
-               .pipe(
-                 switchMap(filter => this.pageFilterDate.pipe(
-                   switchMap(range2 => this.pageNumber.pipe(
-                     switchMap(page2 => from([{
-                       content: this.slice(
-                         this.sortData(
-                           this.filterDataObject(
-                             this.filterDateRange(
-                               this.dataAfterSearch, range2
-                             ), this.filterTable
-                           ), sortAction2
-                         ), page2, this.size, detailRaws)
-                     }])), share())
-                   ))
-                 ))));
-         }
-     
-         /*
-     
-         (likes: any[]) => {
-            return likes.length === 0 ?
-              Observable.of(likes) :
-              Observable.combineLatest(
-                likes.map(like => this.af.database.object("/citations/" + like.$key))
-            )
-          }
-     
-         this.page$ = this.pageFilterDate.pipe(
-            startWith(rangeRules),
-            switchMap(range => this.pageFilter.pipe(debounceTime(500)).pipe(
-              startWith(''),
-              switchMap(filter => this.pageSort.pipe(
-                startWith(sortRules),
-                switchMap(sortAction => this.pageNumber.pipe(
-                  startWith(this.startWith),
-                  switchMap(page => from([{
-                    content: this.slice(
-                      this.sortData(
-                        this.filterData(
-                          this.filterDateRange(
-                            this.data, range
-                          ), filter
-                        ), sortAction
-                      ), page, this.size, detailRaws)
-                  }])),
-                  share()
-                ))))
-            )));*/
     }
     CoreMatTable.prototype.filterDateRange = function (data, range) {
         if (!range || (!range.valueStart && !range.valueEnd)) {
@@ -873,26 +822,21 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterData = function (data, filter) {
         var e_2, _a, e_3, _b;
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterData log');
+        if (data.length === 0 && this.data) {
+            data = this.data;
         }
-        /*if (data.length === 0 && this.data) {
-          data = this.data;
-        }*/
         var result = [];
-        if (typeof filter === "object") {
+        if (typeof filter === 'object') {
             return this.filterDataObject(data, filter);
         }
-        else if (filter && filter.replace(/[^a-zA-Z ]/g, " ")) {
+        else if (filter && filter.replace(/[^a-zA-Z ]/g, ' ')) {
             try {
                 for (var data_1 = __values(data), data_1_1 = data_1.next(); !data_1_1.done; data_1_1 = data_1.next()) {
                     var e = data_1_1.value;
                     e.pond = 0;
                     var dataRaw = JSON.stringify(e).toLowerCase()
-                        .replace(/[^a-zA-Z0-9 ]/g, " ");
-                    var stack = filter.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, " ")
+                        .replace(/[^a-zA-Z0-9 ]/g, ' ');
+                    var stack = filter.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, ' ')
                         .split(' ');
                     var combination = 0;
                     try {
@@ -937,11 +881,6 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.filterDataObject = function (data, filter) {
         var e_4, _a;
-        if (this.pageNumber.getValue() > 0) {
-            this.pageNumber.next(0);
-            this.number = 0;
-            console.log('filterDataObject log');
-        }
         if (data.length === 0 && this.data) {
             //data = this.data;
             return data;
@@ -1010,6 +949,8 @@ var CoreMatTable = /** @class */ (function (_super) {
     };
     CoreMatTable.prototype.fetch = function (page) {
         this.pageNumber.next(page);
+        this.number = page;
+        this.paginator.pageIndex = page;
     };
     CoreMatTable.prototype.sortIt = function (sortidea) {
         this.pageSort.next(sortidea);
@@ -1033,32 +974,36 @@ var CoreMatTable = /** @class */ (function (_super) {
     CoreMatTable.prototype.disconnect = function () {
     };
     CoreMatTable.prototype.slice = function (data, start, end, detailRow) {
+        var e_5, _a;
         if (start === void 0) { start = 0; }
         if (end === void 0) { end = 20; }
         if (detailRow === void 0) { detailRow = true; }
         var rows = [];
-        this._totalElements.next(data.length);
         if (data.length) {
             data = data.slice(start * end, (start * end) + end);
             if (this.emptyRow) {
-                data.forEach(function (d) {
-                    rows.push('empty');
-                    rows.push(d);
-                });
+                try {
+                    for (var data_3 = __values(data), data_3_1 = data_3.next(); !data_3_1.done; data_3_1 = data_3.next()) {
+                        var d = data_3_1.value;
+                        rows.push('empty');
+                        rows.push(d);
+                    }
+                }
+                catch (e_5_1) { e_5 = { error: e_5_1 }; }
+                finally {
+                    try {
+                        if (data_3_1 && !data_3_1.done && (_a = data_3.return)) _a.call(data_3);
+                    }
+                    finally { if (e_5) throw e_5.error; }
+                }
                 return rows;
             }
+            this._totalElements.next(data.length);
             return data;
         }
         else {
-            data = data.slice(start * end, (start * end) + end);
-            if (this.emptyRow) {
-                data.forEach(function (d) {
-                    rows.push('empty');
-                    rows.push(d);
-                });
-                return rows;
-            }
-            return rows;
+            this._totalElements.next(data.length);
+            return data;
         }
     };
     return CoreMatTable;
@@ -1159,14 +1104,12 @@ var TableComponent = /** @class */ (function () {
                         queryParams: { page: null },
                         queryParamsHandling: 'merge',
                     });
-                    _this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 142');
                 }
                 if (_this.data && _this.data.paginator && _this.data.paginator.pageIndex !== newpage) {
-                    _this.data.paginator.pageIndex = newpage;
-                    _this.changeDetectorRef.markForCheck();
-                    console.log('on passe dans la ligne 146');
+                    // this.data.paginator.pageIndex = newpage;
+                    console.log('on passe dans la ligne 146', _this.data.paginator.pageIndex, newpage);
                 }
+                _this.changeDetectorRef.markForCheck();
             });
             var page = this.route.snapshot.queryParams["page"];
             if (page) {
@@ -1293,13 +1236,10 @@ var TableComponent = /** @class */ (function () {
             && this.inputSearch.length < 200) {
             if (this.data) {
                 this.data.filter(this.inputSearch);
-                this.data.pageNumber.next(0);
                 this.data.fetch(0);
-                this.data.number = 0;
-                this.changeDetectorRef.markForCheck();
             }
         }
-        this.ngOnInit();
+        //    this.ngOnInit();
     };
     TableComponent.ctorParameters = function () { return [
         { type: Router },
