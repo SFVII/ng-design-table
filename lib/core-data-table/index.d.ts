@@ -1,7 +1,7 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { DataSource } from "@angular/cdk/collections";
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { DataSource } from '@angular/cdk/collections';
 export interface Sort {
     active: string;
     direction: 'asc' | 'desc';
@@ -27,6 +27,7 @@ export interface CoreMatTableInterface {
     sort: MatSort;
     sortIt: (sortidea: any) => void;
     filter: (myFilter: any) => void;
+    filterData: (data: any, filter: any) => void;
     filterDate: (dateFilter: FilterDateInterface) => void;
     pageNumber: Subject<number>;
     startWith: number;
@@ -49,6 +50,7 @@ export declare class CoreMatTable extends DataSource<Element> {
     private pageSort;
     private pageFilter;
     private pageFilterDate;
+    private _totalElements;
     private backUpData;
     private emptyRow;
     private filterTable;
@@ -61,7 +63,7 @@ export declare class CoreMatTable extends DataSource<Element> {
     sortData(data: any, sortAction: any): any;
     compare(a: number | string | any[], b: number | string | any[], isAsc: boolean): number;
     fetch(page: number): void;
-    sortIt(sortidea: any): void;
+    sortIt(sortIdea: any): void;
     filter(myFilter: any): void;
     filterDate(dateFilter: FilterDateInterface): void;
     connect(): Observable<any>;

@@ -2,20 +2,30 @@
   "name": "table",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^9.0.7",
-    "@angular/core": "^9.0.7"
+    "@angular/common": ">=9.0.7",
+    "@angular/core": ">=9.0.7"
   },
-  "main": "bundles/table.umd.js",
-  "module": "fesm5/table.js",
-  "es2015": "fesm2015/table.js",
-  "esm5": "esm5/table.js",
-  "esm2015": "esm2015/table.js",
-  "fesm5": "fesm5/table.js",
-  "fesm2015": "fesm2015/table.js",
+  "module": "fesm2015/table.mjs",
+  "es2020": "fesm2020/table.mjs",
+  "esm2020": "esm2020/table.mjs",
+  "fesm2020": "fesm2020/table.mjs",
+  "fesm2015": "fesm2015/table.mjs",
   "typings": "table.d.ts",
-  "metadata": "table.metadata.json",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./table.d.ts",
+      "esm2020": "./esm2020/table.mjs",
+      "es2020": "./fesm2020/table.mjs",
+      "es2015": "./fesm2015/table.mjs",
+      "node": "./fesm2015/table.mjs",
+      "default": "./fesm2020/table.mjs"
+    }
+  },
   "sideEffects": false,
   "dependencies": {
-    "tslib": "^1.10.0"
+    "tslib": ">=1.10.0"
   }
 }

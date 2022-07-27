@@ -23,4 +23,13 @@ export interface DesignTableInterface {
     yesNo?: YesNoInterface;
     languague?: string;
 }
+export interface MenuListInterface {
+    Label: string;
+    Icon: string;
+    Type: 'Link' | 'Modal';
+    Data: string[];
+    Route?: string;
+    Class?: string;
+    ComponentModal: any;
+}
 export {};
