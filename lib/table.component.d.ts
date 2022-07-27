@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, EventEmitter, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { CellsComponentList } from './setting/CellsComponentRegistry';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { CoreMatTable, CoreMatTableInterface, FilterDateInterface, Page, PageRequest, Sort } from './core-data-table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TableService } from './table.service';
+import { CellsComponentList } from "./setting/CellsComponentRegistry";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { CoreMatTable, CoreMatTableInterface, FilterDateInterface, Page, PageRequest, Sort } from "./core-data-table";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TableService } from "./table.service";
 import { TranslateService } from './translate.service';
 interface displayColumnsConfig {
     sizeIcon?: number;
@@ -24,11 +24,7 @@ interface displayedColumnsInterface {
     sort?: boolean;
     clickable?: boolean;
     statement?: boolean;
-    valueStatement?: string[];
     config?: displayColumnsConfig;
-    valueOverride?: {
-        [key: string]: string;
-    };
 }
 declare class TableComponent implements OnInit, OnChanges {
     private router;
@@ -36,7 +32,6 @@ declare class TableComponent implements OnInit, OnChanges {
     private service;
     private detector;
     private translate;
-    private changeDetectorRef;
     paginatorCurrent: MatPaginator;
     sortCurrent: MatSort;
     columnDefinitions: [displayedColumnsInterface];
@@ -65,7 +60,7 @@ declare class TableComponent implements OnInit, OnChanges {
     details: string;
     showTable: boolean;
     private PrivateColumnDefinitions;
-    constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService, changeDetectorRef: ChangeDetectorRef);
+    constructor(router: Router, route: ActivatedRoute, service: TableService, detector: ChangeDetectorRef, translate: TranslateService);
     expand(element: any): void;
     ngOnInit(): void;
     ngAfterViewChecked(): void;

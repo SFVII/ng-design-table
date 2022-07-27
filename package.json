@@ -2,8 +2,8 @@
   "name": "table",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^9.0.7",
-    "@angular/core": "^9.0.7"
+    "@angular/common": ">=9.0.7",
+    "@angular/core": ">=9.0.7"
   },
   "main": "bundles/table.umd.js",
   "module": "fesm5/table.js",
